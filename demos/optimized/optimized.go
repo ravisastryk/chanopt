@@ -73,7 +73,7 @@ func NewConfigStore[T any](initial T) *ConfigStore[T] {
 	return cs
 }
 
-func (cs *ConfigStore[T]) Load() T  { return *cs.p.Load() }
+func (cs *ConfigStore[T]) Load() T   { return *cs.p.Load() }
 func (cs *ConfigStore[T]) Store(v T) { cs.p.Store(&v) }
 
 // 5. BoundedIterator → direct Next() iterator

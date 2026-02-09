@@ -11,12 +11,12 @@ import (
 // channelProducer is a detected goroutine that sends values into a locally
 // created channel which is then returned.
 type channelProducer struct {
-	funcLit   *ast.FuncLit    // the goroutine body
-	chanIdent *ast.Ident      // the channel variable name
-	chanType  *types.Chan     // resolved type (may be nil)
-	makePos   token.Pos       // position of make(chan)
-	sends     []*ast.SendStmt // all ch<-expr inside the goroutine
-	bufSize   int             // buffer argument to make, 0 = unbuffered
+	sends     []*ast.SendStmt
+	funcLit   *ast.FuncLit
+	chanIdent *ast.Ident
+	chanType  *types.Chan
+	makePos   token.Pos
+	bufSize   int
 }
 
 // detect scans a file for the generator idiom:

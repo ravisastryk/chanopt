@@ -102,8 +102,16 @@ func ExpensiveSingleton() <-chan int {
 // 9. FixedFanIn — merge two fixed goroutines into one channel.
 func FixedFanIn(a, b <-chan int) <-chan int {
 	out := make(chan int)
-	go func() { for v := range a { out <- v } }()
-	go func() { for v := range b { out <- v } }()
+	go func() {
+		for v := range a {
+			out <- v
+		}
+	}()
+	go func() {
+		for v := range b {
+			out <- v
+		}
+	}()
 	return out
 }
 
