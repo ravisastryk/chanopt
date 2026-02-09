@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.25.7'
+
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Build binaries
+      run: |
+        GOOS=linux GOARCH=amd64 go build -o chanopt-linux-amd64 ./cmd/chanopt
+        GOOS=linux GOARCH=arm64 go build -o chanopt-linux-arm64 ./cmd/chanopt
+        GOOS=darwin GOARCH=amd64 go build -o chanopt-darwin-amd64 ./cmd/chanopt
+        GOOS=darwin GOARCH=arm64 go build -o chanopt-darwin-arm64 ./cmd/chanopt
+        GOOS=windows GOARCH=amd64 go build -o chanopt-windows-amd64.exe ./cmd/chanopt
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          chanopt-linux-amd64
+          chanopt-linux-arm64
+          chanopt-darwin-amd64
+          chanopt-darwin-arm64
+          chanopt-windows-amd64.exe
+        generate_release_notes: true
